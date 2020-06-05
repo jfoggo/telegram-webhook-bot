@@ -3,7 +3,7 @@ const request = require("tiny-json-http");
 class Bot {
 	constructor(token){
 		this.token = token;
-		this.apiURL = "".replace("###TOKEN###",token);
+		this.apiURL = "https://api.telegram.org/bot###TOKEN###/".replace("###TOKEN###",token);
 		this.supported_events = ["message","video","photo","audio","voice","sticker","document","location","animation"];
 		this.events = {};
 		this.commands = {};
@@ -62,6 +62,7 @@ class Bot {
 			if (msg === undefined) return undefined;
 			if (!isNaN(parseInt(msg.message_id)) && !isNaN(parseInt(msg.date)) && msg.chat !== undefined){
 				var chat = msg.chat;
+				this.chat_id = chat.id;
 				if (msg.text !== undefined && msg.text.length > 0) {
 					var m;
 					for (var regex in this.commands){
@@ -95,22 +96,22 @@ class Bot {
 		}
 	}
 	sendMessage(text,chat_id,reply_to){
-		return sendRequest(this.apiURL+"?sendMessage&chat_id="+encodeURIComponent(chat_id)+"&text="+encodeURIComponent(text));
+		return sendRequest(this.apiURL+"sendMessage?chat_id="+encodeURIComponent(chat_id)+"&text="+encodeURIComponent(text));
 	}
 	sendVideo(file_id,chat_id,reply_to,caption){
-		return sendRequest(this.apiURL+"?sendVideo&chat_id="+encodeURIComponent(chat_id)+"&file_id="+encodeURIComponent(file_id)+"&caption="+encodeURIComponent(caption));
+		return sendRequest(this.apiURL+"sendVideo?chat_id="+encodeURIComponent(chat_id)+"&file_id="+encodeURIComponent(file_id)+"&caption="+encodeURIComponent(caption));
 	}
 	sendPhoto(file_id,chat_id,reply_to,caption){
-		return sendRequest(this.apiURL+"?sendPhoto&chat_id="+encodeURIComponent(chat_id)+"&file_id="+encodeURIComponent(file_id)+"&caption="+encodeURIComponent(caption));
+		return sendRequest(this.apiURL+"sendPhoto?chat_id="+encodeURIComponent(chat_id)+"&file_id="+encodeURIComponent(file_id)+"&caption="+encodeURIComponent(caption));
 	}
 	sendAudio(file_id,chat_id,reply_to,caption){
-		return sendRequest(this.apiURL+"?sendAudio&chat_id="+encodeURIComponent(chat_id)+"&file_id="+encodeURIComponent(file_id)+"&caption="+encodeURIComponent(caption)+"&caption="+encodeURIComponent(caption));
+		return sendRequest(this.apiURL+"sendAudio?chat_id="+encodeURIComponent(chat_id)+"&file_id="+encodeURIComponent(file_id)+"&caption="+encodeURIComponent(caption)+"&caption="+encodeURIComponent(caption));
 	}
 	sendVoice(file_id,chat_id,reply_to,caption){
-		return sendRequest(this.apiURL+"?sendVoice&chat_id="+encodeURIComponent(chat_id)+"&file_id="+encodeURIComponent(file_id)+"&caption="+encodeURIComponent(caption)));
+		return sendRequest(this.apiURL+"sendVoice?chat_id="+encodeURIComponent(chat_id)+"&file_id="+encodeURIComponent(file_id)+"&caption="+encodeURIComponent(caption)));
 	}
 	sendLocation(longitude,latitude,chat_id,reply_to){
-		return sendRequest(this.apiURL+"?sendLocation&chat_id="+encodeURIComponent(chat_id)+"&longitude="+encodeURIComponent(longitude)+"&latitude="+encodeURIComponent(latitude));
+		return sendRequest(this.apiURL+"sendLocation?chat_id="+encodeURIComponent(chat_id)+"&longitude="+encodeURIComponent(longitude)+"&latitude="+encodeURIComponent(latitude));
 	}
 }
 
