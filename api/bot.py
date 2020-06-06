@@ -69,7 +69,8 @@ class Bot:
 
 bot = Bot(os.getenv("BOT_TOKEN"))
 for event in bot.supported_events:
-	bot.on(event,lambda *args: "Thank you for sharing this "+event)
+	txt = "Thank you for sharing your "+event
+	bot.on(event,lambda *args: txt)
 bot.on("message",lambda txt: "Received: "+txt)
 bot.on("/start",lambda txt: "Hello 😁")
 
