@@ -1,6 +1,7 @@
 import re
 import json
 import os
+import traceback
 from urllib.request import urlopen
 from urllib.parse import quote
 from http.server import BaseHTTPRequestHandler
@@ -88,6 +89,7 @@ class handler(BaseHTTPRequestHandler):
 			response_data = bot.handle_request(post_data)
 		except Exception as e:
 			print("[ERR] "+str(e))
+			traceback.print_exc()
 			response_data = "{}"
 		print("[*] response: "+str(response_data))
 		# Send response header
