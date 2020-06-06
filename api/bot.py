@@ -69,10 +69,10 @@ class Bot:
 
 bot = Bot(os.getenv("BOT_TOKEN"))
 for event in bot.supported_events:
-	txt = "Thank you for sharing your "+event
-	bot.on(event,lambda *args: txt)
+	bot.on(event,lambda *args: "Thanks for sharing!")
 bot.on("message",lambda txt: "Received: "+txt)
 bot.on("/start",lambda txt: "Hello 😁")
+bot.on("/help",lambda txt: "I cannot help you ...")
 
 #data = { "update_id": 125734581, "message": { "message_id": 18, "from": { "id": 41877655, "is_bot": False, "first_name": 'Julian', "last_name": 'Foggo', "username": 'Jfoggo', "language_code": 'de' }, "chat": { "id": 41877655, "first_name": 'Julian', "last_name": 'Foggo', "username": 'Jfoggo', "type": 'private' }, "date": 1591461626, "text": 'Woe' }}
 #print(bot.handle_request(data))
