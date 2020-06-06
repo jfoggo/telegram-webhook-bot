@@ -1,7 +1,6 @@
 const express = require('express');
 const helmet = require('helmet');
 const moment = require('moment');
-const request = require("request");
 const tb = require("./bot");
 
 const app = express();
