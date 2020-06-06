@@ -4,7 +4,8 @@
   "public" : false,
   "builds" : [
     {"src":"www/**/*","use":"@now/static"},
-    {"src":"api/**/*.js","use":"@now/node"}
+    {"src":"api/**/*.js","use":"@now/node"},
+    {"src":"api/**/*.py","use":"@now/python"}
   ],
   "routes":[
     {"src":"/","dest":"www/index.html"},
