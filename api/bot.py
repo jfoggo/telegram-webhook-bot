@@ -10,7 +10,7 @@ class Bot:
 		self.botURL = "https://api.telegram.org/bot###TOKEN###/".replace("###TOKEN###",token)
 		self.events = {}
 		self.commands = {}
-		self.supported_events = ["message","audio"]
+		self.supported_events = ["message","audio","video"]
 	def on(self,event,callback):
 		if event in self.supported_events: self.events[event] = callback
 		else: self.commands[event] = callback
@@ -38,7 +38,8 @@ class Bot:
 						break
 				else: res = self.events["message"](msg["text"])
 			elif "audio" in msg and "file_id" in msg["audio"]: res = self.events["audio"](msg["audio"]["file_id"])
-			else: raise ValueError("Unsupported Message Type: "+str(msg))
+			elif "video" in msg and "file_id" in msg["video"]: res = self.events["video"](msg["video"]["file_id"])
+			else: res = "Internal Bot Error: Unknown Message"
 			if type(res) is str:
 				return json.dumps({
 					"method": "sendMessage",
@@ -73,10 +74,14 @@ class handler(BaseHTTPRequestHandler):
 		content_length = int(self.headers['Content-Length'])
 		post_data = self.rfile.read(content_length).decode("utf-8")
 		post_data = json.loads(post_data)
-		print("post data: "+str(post_data))
+		print("[*] post data: "+str(post_data))
 		# Execute bot command
-		response_data = bot.handle_request(post_data)
-		print("response: "+str(response_data))
+		try:
+			response_data = bot.handle_request(post_data)
+		except Exception as e:
+			print("[ERR] "+str(e))
+			response_data = "{}"
+		print("[*] response: "+str(response_data))
 		# Send response header
 		self.send_response(200)
 		self.send_header('Content-Type','application/json');
