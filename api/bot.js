@@ -1,8 +1,9 @@
 const request = require("tiny-json-http");
 
 class Bot {
-	constructor(token){
+	constructor(token,options){
 		this.token = token;
+		this.options = options;
 		this.apiURL = "https://api.telegram.org/bot###TOKEN###/".replace("###TOKEN###",token);
 		this.supported_events = ["message","video","photo","audio","voice","sticker","document","location","animation"];
 		this.events = {};
