@@ -1,5 +1,6 @@
 import re
 import json
+import os
 from urllib.request import urlopen
 from urllib.parse import quote
 from http.server import BaseHTTPRequestHandler
@@ -47,19 +48,20 @@ class Bot:
 		else: raise ValueError("Unknown Update-ID: "+str(data))
 	def send_message(self,text,chat_id=None):
 		if chat_id == None: chat_id = self.chat_id
-		return self.send_get_request(self.botURL+"sendMessage?chat_id="+str(chat_id)+"&text="+str(text))
+		return self.send_get_request(self.botURL+"sendMessage?chat_id="+quote(str(chat_id))+"&text="+quote(str(text)))
 	def send_audio(self,file_id,text="",chat_id=None):
 		if chat_id == None: chat_id = self.chat_id
-		return self.send_get_request(self.botURL+"sendAudio?chat_id="+str(chat_id)+"&file_id="+str(file_id)+"&caption="+str(text))
+		return self.send_get_request(self.botURL+"sendAudio?chat_id="+quote(str(chat_id))+"&file_id="+quote(str(file_id))+"&caption="+quote(str(text)))
 	def forward(self,chat_id):
-		return self.send_get_request(self.botURL+"forwardMessage?chat_id="+str(chat_id)+"&from_chat_id="+str(self.chat_id)+"&message_id="+str(self.message_id))
+		return self.send_get_request(self.botURL+"forwardMessage?chat_id="+quote(str(chat_id))+"&from_chat_id="+quote(str(self.chat_id))+"&message_id="+quote(str(self.message_id)))
 	def send_get_request(self,url):
 		req = urlopen(url)
 		res = req.read().decode("utf-8")
 		return json.loads(res)
 
-bot = Bot("XYZ")
+bot = Bot(os.getenv("BOT_TOKEN"))
 bot.on("message",lambda txt: "Received: "+txt)
+bot.on("audio",lambda file_id: "Cool stuff!")
 
 #data = { "update_id": 125734581, "message": { "message_id": 18, "from": { "id": 41877655, "is_bot": False, "first_name": 'Julian', "last_name": 'Foggo', "username": 'Jfoggo', "language_code": 'de' }, "chat": { "id": 41877655, "first_name": 'Julian', "last_name": 'Foggo', "username": 'Jfoggo', "type": 'private' }, "date": 1591461626, "text": 'Woe' }}
 #print(bot.handle_request(data))
