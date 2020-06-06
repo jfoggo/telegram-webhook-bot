@@ -123,6 +123,14 @@ class Bot {
 	forward(chat_id){
 		return sendRequest(this.apiURL+"forwardMessage?chat_id="+encodeURIComponent(chat_id)+"&from_chat_id="+encodeURIComponent(this.chat_id)+"&message_id="+encodeURIComponent(this.message_id));
 	}
+	setDefaultEvents(){
+		for (var i=0;i<this.supported_events.length;i++){
+			var event = this.supported_events[i];
+			if (event != "message") this.on(event,()=>"Thank you for uploading the "+event);
+		}
+		this.on("message",(text)=>"Received: "+text);
+		this.on(new RegExp("/start"),(text)=>"Hello "+this.username);
+	}
 }
 
 function sendRequest(url){

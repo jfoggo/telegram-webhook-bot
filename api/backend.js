@@ -1,13 +1,13 @@
-const express = require("express");
+const express = require('express');
+const helmet = require('helmet');
+const moment = require('moment');
+const request = require("request");
 const tb = require("./bot");
 
 const app = express();
+app.use(helmet());
+app.use(express.json());
+
 const bot = new tb.Bot(process.env.BOT_TOKEN);
 
 app.post("*",bot.handle_request);
-
-bot.on(new RegExp("/start"),(text)=>"Welcome "+bot.username);
-bot.on("photo",(file_id)=>"Thanks for uploading a photo");
-bot.on("message",(text)=>{
-	sendMessage(bot.chat_id,"Received: "+text)
-});
