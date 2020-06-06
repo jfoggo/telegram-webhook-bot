@@ -59,10 +59,11 @@ class Bot {
 			var msg;
 			var msg_keys = ["message","edited_message","chanel_post","edited_channel_post"];
 			msg_keys.map(key => data[key] === undefined ? "" : msg=data[key]);
-			if (msg === undefined) return undefined;
+			if (msg === undefined) return [undefined];
 			if (!isNaN(parseInt(msg.message_id)) && !isNaN(parseInt(msg.date)) && msg.chat !== undefined){
 				var chat = msg.chat;
 				this.chat_id = chat.id;
+				this.message_id = msg.message_id;
 				if (msg.text !== undefined && msg.text.length > 0) {
 					var m;
 					for (var regex in this.commands){
@@ -78,22 +79,28 @@ class Bot {
 				else if (msg.document !== undefined && !isNaN(parseInt(msg.document.file_id))) return ["document",msg.document.file_id];
 				else if (msg.sticker !== undefined && !isNaN(parseInt(msg.sticker.file_id))) return ["sticker",msg.sticker.file_id];
 				else if (msg.location !== undefined && !isNaN(parseInt(msg.location.file_id))) return ["location",msg.location.longitude,msg.location.latitude];
-				else return undefined;
+				else return [undefined];
 			}
 		}
-		else return undefined;
+		else return [undefined];
 	}
 	handle_response(text){
-		if (text === undefined){
-			this.res.json({ok:true});
-		}
-		else {
+		if (text instanceof String) {
 			this.res.json({
 				method: "sendMessage",
 				chat_id: this.chat_id,
 				text: text
 			});
 		}
+		else this.res.json({ok:true});
+	}
+	handle_response_error(err){
+		console.log(err);
+		this.res.json({
+			method: "sendMessage",
+			chat_id: this.chat_id,
+			text: "INTERNAL BOT ERROR: "+err
+		});
 	}
 	sendMessage(text,chat_id,reply_to){
 		return sendRequest(this.apiURL+"sendMessage?chat_id="+encodeURIComponent(chat_id)+"&text="+encodeURIComponent(text));
@@ -112,6 +119,9 @@ class Bot {
 	}
 	sendLocation(longitude,latitude,chat_id,reply_to){
 		return sendRequest(this.apiURL+"sendLocation?chat_id="+encodeURIComponent(chat_id)+"&longitude="+encodeURIComponent(longitude)+"&latitude="+encodeURIComponent(latitude));
+	}
+	forward(chat_id){
+		return sendRequest(this.apiURL+"forwardMessage?chat_id="+encodeURIComponent(chat_id)+"&from_chat_id="+encodeURIComponent(this.chat_id)+"&message_id="+encodeURIComponent(this.message_id));
 	}
 }
 
