@@ -8,6 +8,7 @@ class Bot {
 		this.supported_events = ["message","video","photo","audio","voice","sticker","document","location","animation"];
 		this.events = {};
 		this.commands = {};
+		this.setDefaultEvents();
 	}
 	on(event,callback){
 		if (event instanceof RegExp){
