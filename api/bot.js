@@ -54,10 +54,10 @@ class Bot {
 		else response = new Promise((a,b)=>a());
 
 		if (response instanceof Promise){
-			response.then(this.handle_response.bind(this)).catch(this.handle_response_error.bind(this));
+			response.then(this.handle_response).catch(this.handle_response_error);
 		}
-		else if (response instanceof String) this.handle_response(response).bind(this);
-		else this.handle_response().bind(this);
+		else if (response instanceof String) this.handle_response(response);
+		else this.handle_response();
 	}
 	determine_event(data){
 		if (!isNaN(parseInt(data.update_id))) {
