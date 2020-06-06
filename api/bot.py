@@ -7,10 +7,10 @@ from http.server import BaseHTTPRequestHandler
 
 class Bot:
 	def __init__(self,token):
-		self.botURL = "https://api.telegram.org/bot###TOKEN###/".replace("###TOKEN###",token)
+		self.botURL = "https://api.telegram.org/bot###TOKEN###/".replace("###TOKEN###",str(token))
 		self.events = {}
 		self.commands = {}
-		self.supported_events = ["message","audio","video"]
+		self.supported_events = ["message","audio","video","photo","sticker","location","animation","voice","document"]
 	def on(self,event,callback):
 		if event in self.supported_events: self.events[event] = callback
 		else: self.commands[event] = callback
@@ -39,6 +39,12 @@ class Bot:
 				else: res = self.events["message"](msg["text"])
 			elif "audio" in msg and "file_id" in msg["audio"]: res = self.events["audio"](msg["audio"]["file_id"])
 			elif "video" in msg and "file_id" in msg["video"]: res = self.events["video"](msg["video"]["file_id"])
+			elif "photo" in msg and "file_id" in msg["photo"][0]: res = self.events["photo"](msg["photo"]["file_id"])
+			elif "sticker" in msg and "file_id" in msg["sticker"]: res = self.events["sticker"](msg["sticker"]["file_id"])
+			elif "location" in msg and "longitude" in msg["location"] and "latitude" in msg["location"]: res = self.events["location"](msg["location"]["longitude"],msg["location"]["longitude"])
+			elif "animation" in msg and "file_id" in msg["animation"]: res = self.events["animation"](msg["video"]["file_id"])
+			elif "document" in msg and "file_id" in msg["document"]: res = self.events["document"](msg["document"]["file_id"])
+			elif "voice" in msg and "file_id" in msg["voice"]: res = self.events["voice"](msg["voice"]["file_id"])
 			else: res = "Internal Bot Error: Unknown Message"
 			if type(res) is str:
 				return json.dumps({
@@ -61,8 +67,10 @@ class Bot:
 		return json.loads(res)
 
 bot = Bot(os.getenv("BOT_TOKEN"))
+for event in bot.supported_events:
+	bot.on(event,lambda *args: "Thank you for sharing this "+event)
 bot.on("message",lambda txt: "Received: "+txt)
-bot.on("audio",lambda file_id: "Cool stuff!")
+bot.on("/start",lambda txt: "Hello 😁")
 
 #data = { "update_id": 125734581, "message": { "message_id": 18, "from": { "id": 41877655, "is_bot": False, "first_name": 'Julian', "last_name": 'Foggo', "username": 'Jfoggo', "language_code": 'de' }, "chat": { "id": 41877655, "first_name": 'Julian', "last_name": 'Foggo', "username": 'Jfoggo', "type": 'private' }, "date": 1591461626, "text": 'Woe' }}
 #print(bot.handle_request(data))
