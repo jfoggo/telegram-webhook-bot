@@ -10,3 +10,5 @@ app.use(express.json());
 const bot = new tb.Bot(process.env.BOT_TOKEN);
 
 app.post("*",bot.handle_request);
+
+module.exports = app;
