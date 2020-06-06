@@ -12,6 +12,7 @@ class Bot:
 		self.events = {}
 		self.commands = {}
 		self.supported_events = ["message","audio","video","photo","sticker","location","animation","voice","document"]
+		self.set_default_events()
 	def on(self,event,callback):
 		if event in self.supported_events: self.events[event] = callback
 		else: self.commands[event] = callback
@@ -66,11 +67,17 @@ class Bot:
 		req = urlopen(url)
 		res = req.read().decode("utf-8")
 		return json.loads(res)
+	def set_default_events(self):
+		self.on("message",lambda txt: "Received: "+txt)
+		self.on("video",lambda file_id: "Thanks for sharing your video")
+		self.on("audio",lambda file_id: "Thanks for sharing your audio")
+		self.on("sticker",lambda file_id: "Thanks for sharing your sticker")
+		self.on("photo",lambda file_id: "Thanks for sharing your phot")
+		self.on("location",lambda lon,lat: "Thanks for sharing your location: "+str({"lon":lon,"lat":lat}))
+		self.on("document",lambda file_id: "Thanks for sharing your document")
+		self.on("animation",lambda file_id: "Thanks for sharing your animation")
 
 bot = Bot(os.getenv("BOT_TOKEN"))
-for event in bot.supported_events:
-	bot.on(event,lambda *args: "Thanks for sharing!")
-bot.on("message",lambda txt: "Received: "+txt)
 bot.on("/start",lambda txt: "Hello 😁")
 bot.on("/help",lambda txt: "I cannot help you ...")
 
