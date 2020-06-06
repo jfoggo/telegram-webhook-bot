@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "name": "telegram_webhook_bot",
+  "public" : false,
+  "builds" : [
+    {"src":"www/**/*","use":"@now/static"},
+    {"src":"api/**/*.js","use":"@now/node"}
+  ],
+  "routes":[
+    {"src":"/","dest":"www/index.html"},
+    {"src":"/(.*)","dest":"www/$1"},
+    {"src":"/js/(.*)","dest":"www/js/$1"},
+    {"src":"/css/(.*)","dest":"www/css/$1"},
+    {"src":"/fonts/(.*)","dest":"www/fonts/$1"},
+    {"src":"/img/(.*)","dest":"www/img/$1"}
+  ]
+}
