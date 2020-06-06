@@ -40,7 +40,7 @@ class Bot:
 				else: res = self.events["message"](msg["text"])
 			elif "audio" in msg and "file_id" in msg["audio"]: res = self.events["audio"](msg["audio"]["file_id"])
 			elif "video" in msg and "file_id" in msg["video"]: res = self.events["video"](msg["video"]["file_id"])
-			elif "photo" in msg and "file_id" in msg["photo"][0]: res = self.events["photo"](msg["photo"]["file_id"])
+			elif "photo" in msg and "file_id" in msg["photo"][0]: res = self.events["photo"](msg["photo"][0]["file_id"])
 			elif "sticker" in msg and "file_id" in msg["sticker"]: res = self.events["sticker"](msg["sticker"]["file_id"])
 			elif "location" in msg and "longitude" in msg["location"] and "latitude" in msg["location"]: res = self.events["location"](msg["location"]["longitude"],msg["location"]["longitude"])
 			elif "animation" in msg and "file_id" in msg["animation"]: res = self.events["animation"](msg["video"]["file_id"])
