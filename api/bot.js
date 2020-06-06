@@ -51,7 +51,7 @@ class Bot {
 		else response = new Promise((a,b)=>a());
 
 		if (response instanceof Promise){
-			response.then(this.handle_response.bind(this)).catch(handle_response_error);
+			response.then(this.handle_response.bind(this)).catch(this.handle_response_error.bind(this));
 		}
 		else if (response instanceof String) this.handle_response(response).bind(this);
 		else this.handle_response().bind(this);
