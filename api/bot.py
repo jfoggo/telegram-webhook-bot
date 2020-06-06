@@ -8,6 +8,7 @@ from http.server import BaseHTTPRequestHandler
 
 class Bot:
 	def __init__(self,token):
+		self.reply = True
 		self.botURL = "https://api.telegram.org/bot###TOKEN###/".replace("###TOKEN###",str(token))
 		self.events = {}
 		self.commands = {}
@@ -52,7 +53,8 @@ class Bot:
 				return json.dumps({
 					"method": "sendMessage",
 					"chat_id": self.chat_id,
-					"text": res
+					"text": res,
+					"reply_to_message_id": self.msg_id if self.reply else None
 				})
 		else: raise ValueError("Unknown Update-ID: "+str(data))
 	def send_message(self,text,chat_id=None):
@@ -60,7 +62,10 @@ class Bot:
 		return self.send_get_request(self.botURL+"sendMessage?chat_id="+quote(str(chat_id))+"&text="+quote(str(text)))
 	def send_audio(self,file_id,text="",chat_id=None):
 		if chat_id == None: chat_id = self.chat_id
-		return self.send_get_request(self.botURL+"sendAudio?chat_id="+quote(str(chat_id))+"&file_id="+quote(str(file_id))+"&caption="+quote(str(text)))
+		return self.send_get_request(self.botURL+"sendAudio?chat_id="+quote(str(chat_id))+"&file_id="+quote(str(file_id))+"&caption="+quote(str(text))+("&reply_to_message_id="+quote(str(self.msg_id)) if self.reply else ""))
+	def send_video(self,file_id,text="",chat_id=None):
+		if chat_id == None: chat_id = self.chat_id
+		return self.send_get_request(self.botURL+"sendVideo?chat_id="+quote(str(chat_id))+"&file_id="+quote(str(file_id))+"&caption="+quote(str(text))+("&reply_to_message_id="+quote(str(self.msg_id)) if self.reply else ""))
 	def forward(self,chat_id):
 		return self.send_get_request(self.botURL+"forwardMessage?chat_id="+quote(str(chat_id))+"&from_chat_id="+quote(str(self.chat_id))+"&message_id="+quote(str(self.message_id)))
 	def send_get_request(self,url):
@@ -72,7 +77,7 @@ class Bot:
 		self.on("video",lambda file_id: "Thanks for sharing your video")
 		self.on("audio",lambda file_id: "Thanks for sharing your audio")
 		self.on("sticker",lambda file_id: "Thanks for sharing your sticker")
-		self.on("photo",lambda file_id: "Thanks for sharing your phot")
+		self.on("photo",lambda file_id: "Thanks for sharing your photo")
 		self.on("location",lambda lon,lat: "Thanks for sharing your location: "+str({"lon":lon,"lat":lat}))
 		self.on("document",lambda file_id: "Thanks for sharing your document")
 		self.on("animation",lambda file_id: "Thanks for sharing your animation")
