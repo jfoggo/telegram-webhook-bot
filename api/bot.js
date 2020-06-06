@@ -116,7 +116,7 @@ class Bot {
 		return sendRequest(this.apiURL+"sendAudio?chat_id="+encodeURIComponent(chat_id)+"&file_id="+encodeURIComponent(file_id)+"&caption="+encodeURIComponent(caption)+"&caption="+encodeURIComponent(caption));
 	}
 	sendVoice(file_id,chat_id,reply_to,caption){
-		return sendRequest(this.apiURL+"sendVoice?chat_id="+encodeURIComponent(chat_id)+"&file_id="+encodeURIComponent(file_id)+"&caption="+encodeURIComponent(caption)));
+		return sendRequest(this.apiURL+"sendVoice?chat_id="+encodeURIComponent(chat_id)+"&file_id="+encodeURIComponent(file_id)+"&caption="+encodeURIComponent(caption));
 	}
 	sendLocation(longitude,latitude,chat_id,reply_to){
 		return sendRequest(this.apiURL+"sendLocation?chat_id="+encodeURIComponent(chat_id)+"&longitude="+encodeURIComponent(longitude)+"&latitude="+encodeURIComponent(latitude));
