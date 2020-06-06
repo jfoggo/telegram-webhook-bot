@@ -33,10 +33,12 @@ class Bot {
 		else return false;
 	}
 	handle_request(req,res){
+		console.log("[*] Incoming request: ",req.body);
 		this.req = req;
 		this.res = res;
 		var [event,...args] = this.determine_event(req.body);
 		var response;
+		console.log("[*] Event Type: ",event,", args: ",args);
 		if (event !== undefined){
 			if (this.events[event] !== undefined) {
 				response = this.events[event](...args);
@@ -87,6 +89,7 @@ class Bot {
 		else return [undefined];
 	}
 	handle_response(text){
+		console.log("[*] Response: ",text);
 		if (text instanceof String) {
 			this.res.json({
 				method: "sendMessage",
@@ -136,6 +139,7 @@ class Bot {
 }
 
 function sendRequest(url){
+	console.log("sendRequest: "+url);
 	return request.get(url);
 }
 
