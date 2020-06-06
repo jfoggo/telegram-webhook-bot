@@ -39,6 +39,7 @@ class Bot {
 		var [event,...args] = this.determine_event(req.body);
 		var response;
 		console.log("[*] Event Type: ",event,", args: ",args);
+		console.log("events: ",this.events);
 		if (event !== undefined){
 			if (this.events[event] !== undefined) {
 				response = this.events[event](...args);
@@ -100,7 +101,7 @@ class Bot {
 		else this.res.json({ok:true});
 	}
 	handle_response_error(err){
-		console.log(err);
+		console.log("[*] Response Error: ",err);
 		this.res.json({
 			method: "sendMessage",
 			chat_id: this.chat_id,
