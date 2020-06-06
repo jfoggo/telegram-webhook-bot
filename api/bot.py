@@ -82,5 +82,5 @@ class handler(BaseHTTPRequestHandler):
 		self.send_header('Content-Type','application/json');
 		self.end_headers()
 		# Send response body
-		self.wfile.write(str(post_data).encode())
+		self.wfile.write(str(response_data).encode())
 
