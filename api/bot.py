@@ -1,6 +1,7 @@
 import re
 import json
 import os
+import time
 import traceback
 from urllib.request import urlopen
 from urllib.parse import quote
@@ -81,6 +82,12 @@ class Bot:
 		self.on("location",lambda lon,lat: "Thanks for sharing your location: "+str({"lon":lon,"lat":lat}))
 		self.on("document",lambda file_id: "Thanks for sharing your document")
 		self.on("animation",lambda file_id: "Thanks for sharing your animation")
+	def broadcast(self,chat_ids,text,chat_id):
+		for i,id in enumerate(chat_ids):
+			self.send_message(text)
+			if i%30 == 0: time.sleep(1)
+		return True
+
 
 bot = Bot(os.getenv("BOT_TOKEN"))
 bot.on("/start",lambda txt: "Hello 😁")
